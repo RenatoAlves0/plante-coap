@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "coap": "^0.24.0",
-    "nodemon": "^2.0.6"
+    "nodemon": "^2.0.6",
+    "ntp-time": "^1.1.3"
   }
 }
