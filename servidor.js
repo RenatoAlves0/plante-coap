@@ -3,16 +3,12 @@ const server = coap.createServer()
 const NTP = require("ntp-time").Client
 const client_ntp = new NTP("a.st1.ntp.br", 123, { timeout: 5000 })
 const jsonexport = require('jsonexport')
-fs = require('fs');
-let delay_anterior = 0
+fs = require('fs')
 let dados = { chegada: undefined, delay_ms: undefined, jitter_ms: undefined }
-let array_dados = []
-let acc = 0
-let arquivo
+let delay_anterior = 0, array_dados = [], arquivo
 
 server.on('request', (req, res) => {
     // console.log(req.url.split('/')[1])
-
     dados = JSON.parse(Buffer.from(req.payload).toString())
     dados.envio = data_saida(dados.envio_s, dados.envio_us)
 
@@ -47,17 +43,15 @@ data_saida = (envio_s, envio_us) => {
 }
 
 dadosToFile = (dados) => {
-    acc = acc + 1
-    console.log(dados)
     array_dados.push(dados)
-    if (acc == 2) {
-        console.log(array_dados)
+    console.log(dados)
+    if (dados.id == 24) {
         jsonexport(array_dados, (err, csv) => {
             if (err) return console.error(err)
             arquivo = csv
-        })
-        fs.writeFile('dados.csv', arquivo, function (err) {
-            if (err) return console.log(err)
+            fs.writeFile('a.csv', arquivo, (err) => {
+                if (err) return console.log(err)
+            })
         })
     }
 }
