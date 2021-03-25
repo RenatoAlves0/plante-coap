@@ -68,7 +68,7 @@ gravar = () => {
     jsonexport(array_dados, (err, csv) => {
         if (err) return console.error(err)
         let arquivo = csv
-        fs.writeFile('exp2/C1000_3.csv', arquivo, (err) => {
+        fs.writeFile('exp2/C0_3.csv', arquivo, (err) => {
             if (err) return console.log(err)
             else gravado = true
         })
