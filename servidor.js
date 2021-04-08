@@ -4,6 +4,7 @@ const jsonexport = require('jsonexport')
 const fs = require('fs')
 let dados = { chegada: undefined, delay_ms: undefined, jitter_ms: undefined }
 let array_dados = [], delay_anterior = -1, ms = 0, mi = 0, nome_arquivo
+let fim = false
 
 server.on('request', (req, res) => {
     dados = JSON.parse(String(req.payload))
@@ -15,34 +16,35 @@ server.on('request', (req, res) => {
         nome_arquivo = 'exp1/' + dados.nome_arquivo
         console.log('RESETANDO\n')
         console.log(dados)
-    } else
-        if (dados.fim) {
-            gravar(dados.total)
-            console.log(dados)
-        }
-        else {
-            dados.chegada = String(new Date().getTime() / 1000)
-            dados.chegada = data_format_ms(dados.chegada.split('.')[0], dados.chegada.split('.')[1])
-            dados.envio = data_format_us(dados.s, dados.us)
-            let envio = new Date(parseInt(dados.envio))
-            let chegada = new Date(parseInt(dados.chegada))
-            dados.delay_ms = chegada - envio
-            if (dados.delay_ms < 0) dados.delay_ms = 0
+        fim = false
+    } else if (dados.fim && !fim) {
+        gravar(dados.total)
+        console.log(dados)
+        fim = true
+    }
+    else if (!fim) {
+        dados.chegada = String(new Date().getTime() / 1000)
+        dados.chegada = data_format_ms(dados.chegada.split('.')[0], dados.chegada.split('.')[1])
+        dados.envio = data_format_us(dados.s, dados.us)
+        let envio = new Date(parseInt(dados.envio))
+        let chegada = new Date(parseInt(dados.chegada))
+        dados.delay_ms = chegada - envio
+        if (dados.delay_ms < 0) dados.delay_ms = 0
 
-            if (delay_anterior == -1)
-                dados.jitter_ms = 0
-            else
-                dados.jitter_ms = Math.abs(delay_anterior - dados.delay_ms)
-            delay_anterior = dados.delay_ms
-            delete dados.a
-            mi++
-            ms = ms + dados.delay_ms
-            console.log('Mensagem: ' + Buffer.byteLength(req.payload) + ' B')
-            console.log('Qtd Msg: ' + mi)
-            console.log('Delay::::::::::::::: ' + dados.delay_ms + ' ms')
-            console.log('Média: ' + (ms / mi).toFixed(2) + ' ms\n')
-            array_dados.push(dados)
-        }
+        if (delay_anterior == -1)
+            dados.jitter_ms = 0
+        else
+            dados.jitter_ms = Math.abs(delay_anterior - dados.delay_ms)
+        delay_anterior = dados.delay_ms
+        delete dados.a
+        mi++
+        ms = ms + dados.delay_ms
+        console.log('Mensagem: ' + Buffer.byteLength(req.payload) + ' B')
+        console.log('Qtd Msg: ' + mi)
+        console.log('Delay::::::::::::::: ' + dados.delay_ms + ' ms')
+        console.log('Média: ' + (ms / mi).toFixed(2) + ' ms\n')
+        array_dados.push(dados)
+    }
 })
 
 server.listen(() => {
