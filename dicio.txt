@@ -1,0 +1,28 @@
+CoAP
+
+1000 = 60pac
+750 = 80pac
+500 = 120pac
+250 = 239pac
+100 = 590pac
+
+### A ###
+Tamanho Url: 1 bytes
+Tamanho Mensagem: 29 bytes
+Pacote: 90 bytes
+"Excedente": 60 bytes
+"String VAZIA"
+
+### B ###
+Tamanho Url: 1 bytes
+Tamanho Mensagem: 67 bytes
+Pacote: 128 bytes
+"Excedente": 60 bytes
+1234abcdefghijklmnopqrstuvwxyz
+
+### C ###
+Tamanho Url: 1 bytes
+Tamanho Mensagem: 195 bytes
+Pacote: 256 bytes
+"Excedente": 60 bytes
+12abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz
